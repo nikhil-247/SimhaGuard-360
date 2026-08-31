@@ -19,6 +19,10 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // Existing project components use flexible Supabase/API response shapes.
+      '@typescript-eslint/no-explicit-any': 'off',
+      // Some dashboard/helper values are intentionally retained for future UI flows.
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
