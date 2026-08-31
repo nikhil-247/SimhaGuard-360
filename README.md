@@ -1,89 +1,153 @@
-SimhaGuard 360 is a real-time, web-based safety dashboard designed to protect pilgrims and ensure rapid emergency response during large-scale religious events. Built with React, TypeScript, Supabase, Vite, and Tailwind, it seamlessly integrates live crowd analytics, predictive alerts, medical coordination, and family tracking in an interactive interface.
+# SimhaGuard 360
 
-Key Features
-Role-based Authentication: Secure login system for admins, volunteers, and pilgrims (AuthContext, LoginForm, ProtectedRoute).
+**Real-Time Crowd Safety & Emergency Response Platform**
 
-Live Dashboard:
+SimhaGuard 360 is a web-based safety dashboard designed for large public gatherings such as **Simhastha 2028**. It brings crowd monitoring, predictive alerts, incident coordination, evacuation support, family tracking, and an AI safety assistant into a single role-based interface.
 
-AdminPanel/UserDashboard: Customized views for authorities and regular users.
+> **Project status:** Working prototype / research project. Demo data is included for local development. It is not an officially deployed emergency-response system.
 
-PredictiveAlerts: ML-driven warnings and crowd surge forecasting.
+## Highlights
 
-AlertsPanel & ControlPanel: Real-time incident management.
+- Role-based experiences for admins, volunteers, and users
+- Real-time dashboard synchronization with Supabase
+- Crowd-density heatmap and location markers
+- Predictive crowd-surge alerts
+- Incident and alert management workflows
+- Evacuation-route visualization
+- RFID-based family/wristband tracking interface
+- AI safety assistant for context-aware support
+- Database health and system monitoring views
+- Responsive React + TypeScript frontend
 
-DatabaseMonitor: Backend data health and diagnostics.
+## Architecture
 
-Crowd & Route Mapping:
+```text
+                    +----------------------+
+                    |   React + TypeScript  |
+                    |   Dashboard / Views   |
+                    +----------+-----------+
+                               |
+                 +-------------+-------------+
+                 |                           |
+          Local/mock data             Supabase services
+                 |                           |
+                 |                 +---------+---------+
+                 |                 | Auth / Database   |
+                 |                 | Realtime / Storage|
+                 |                 +---------+---------+
+                 |                           |
+                 +-------------+-------------+
+                               |
+                    +----------v-----------+
+                    | Safety workflows      |
+                    | alerts / maps /       |
+                    | tracking / assistant  |
+                    +-----------------------+
+```
 
-CrowdHeatmap: Live density visualization over Ujjain map.
+## Core modules
 
-EvacuationRoutes & LocationMarkers: Smart route suggestions and critical points.
+### Crowd monitoring
+`CrowdHeatmap` visualizes density information and `PredictiveAlerts` provides a place for ML-driven crowd-risk signals.
 
-Family Tracking:
+### Incident response
+`AlertsPanel` and `ControlPanel` support alert review and response coordination, while `LocationMarkers` and `EvacuationRoutes` provide geographic context.
 
-RFIDTracker: Locate and monitor linked wristbands for safety.
+### Family safety
+`RFIDTracker` provides a dashboard workflow for locating linked wristbands and supporting family reunification scenarios.
 
-AI Safety Assistant:
+### AI assistance
+`AIAssistant` provides a conversational interface for context-aware safety queries.
 
-Chat/AIAssistant: Context-aware queries and support.
+### Access control
+Authentication and protected routes separate user experiences for different roles.
 
-Modular Navigation:
+## Tech stack
 
-Responsive header/sidebar, optimized for mobile and desktop.
+**Frontend:** React, TypeScript, Vite, Tailwind CSS  
+**Backend services:** Supabase  
+**State:** React Context API, custom hooks  
+**Authentication:** Supabase Auth / protected routes  
+**Data:** Mock/local data + Supabase-backed realtime data  
+**Tooling:** ESLint, npm
 
-Stack
-Frontend: React + TypeScript, Vite for fast builds
+## Project structure
 
-UI: Tailwind CSS
+```text
+src/
+├── components/
+│   ├── Auth/
+│   ├── Chat/
+│   ├── Dashboard/
+│   ├── Map/
+│   └── Navigation/
+├── contexts/
+├── data/
+├── hooks/
+├── lib/
+├── types/
+└── App.tsx
+```
 
-State/Context: Context API, custom hooks
+## Getting started
 
-Backend/SaaS: Supabase for real-time data, authentication, and storage
+### Requirements
 
-useSupabaseData and useRealTimeData hooks power live dashboards.
+- Node.js 18+
+- npm 9+
+- Optional Supabase project for realtime/authenticated features
 
-Data: Modular mock/data layer for local development and testing
+### Install
 
-Deployment: Vite config for smooth dev/prod transitions
-
-Getting Started
-Clone repo & install dependencies:
-
-bash
-git clone https://github.com/yourusername/simhaguard360.git
+```bash
+git clone https://github.com/nikhil-247/SimhaGuard-360.git
+cd SimhaGuard-360
 npm install
-Set up Supabase — create a .env using .env.example.
-Get your Supabase API keys and database URL.
+```
 
-Run locally:
+### Configure environment
 
-bash
+Copy `.env.example` to `.env` and provide the Supabase URL and anon key when using the hosted backend.
+
+```bash
+cp .env.example .env
+```
+
+Never commit real credentials. Environment files are excluded by `.gitignore`.
+
+### Run
+
+```bash
 npm run dev
-Open your browser at http://localhost:5173
+```
 
-Screenshots
-Admin and user dashboards, live crowd heatmap, predictive alert panel, RFID tracking interface, evacuation routes, and conversational AI safety assistant.
+### Validate
 
-Project Structure
-components/ Core UI panels & logic
+```bash
+npm run lint
+npm run build
+```
 
-data/ Local mock data providers
+## Development notes
 
-hooks/ Real-time and Supabase integration
+The repository is structured so the UI can run with local/mock data while backend-backed features can be enabled through Supabase. This makes the project easy to demonstrate without requiring access to a live event or sensitive operational data.
 
-lib/ Supabase setup & service functions
+## Limitations
 
-types/ Shared TypeScript interfaces
+This project uses simulated/mock event data for development. Real emergency deployment would require validated crowd-sensing pipelines, resilient communications, audited access control, privacy controls, failover, and field testing with relevant authorities.
 
-supabase/ Env keys and cloud config
+The predictive-alert interface should therefore be treated as a decision-support prototype, not an autonomous safety system.
 
-Why SimhaGuard?
-What makes this project unique is its real use of Supabase for live event data, robust crowd safety modeling, and actual modular TypeScript code optimized for speed and reliability. It's not a mock-up—it's engineered for scalable, real-world deployment.
+## Roadmap
 
-Contributing
-We welcome PRs on dashboard modules, data integrations, UI/UX, and simulation tools. See our issues board for open tasks!
+- Add automated test coverage for critical UI flows
+- Add typed backend schemas and migration files
+- Improve offline/failover behavior
+- Connect verified crowd-density data sources
+- Add observability and error reporting
+- Add role/permission policy tests
+- Package the application for production deployment
 
-License
+## License
+
 MIT
-
-Join us in creating safer, smarter mass gatherings for everyone.
