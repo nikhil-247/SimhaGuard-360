@@ -11,7 +11,7 @@ import { ControlPanel } from './components/Dashboard/ControlPanel';
 import { RFIDTracker } from './components/Dashboard/RFIDTracker';
 import PredictiveAlerts from './components/Dashboard/PredictiveAlerts';
 import AdminPanel from './components/Dashboard/AdminPanel';
-import { UserDashboard } from './components/Dashboard/UserDashboard';
+import UserDashboard from './components/Dashboard/UserDashboard';
 import { AIAssistant } from './components/Chat/AIAssistant';
 import { useSupabaseData } from './hooks/useSupabaseData';
 import { useAuth } from './contexts/AuthContext';
@@ -40,7 +40,6 @@ const DashboardContent: React.FC = () => {
 
   const handleEmergencyAction = (action: string, data: any) => {
     console.log('Emergency action triggered:', action, data);
-    // Add alert to database
     addAlert({
       type: 'security',
       severity: 'high',
@@ -176,7 +175,6 @@ const DashboardContent: React.FC = () => {
           />
           
           <main className="flex-1 p-6">
-            {/* Simulation Mode Toggle */}
             {simulationMode && (
               <div className="mb-6 bg-blue-500/20 border border-blue-500/50 rounded-lg p-4">
                 <div className="flex items-center justify-between">
@@ -201,7 +199,6 @@ const DashboardContent: React.FC = () => {
           </main>
         </div>
         
-        {/* AI Assistant */}
         <AIAssistant isOpen={showAIChat} onToggle={() => setShowAIChat(!showAIChat)} />
       </div>
     </>
