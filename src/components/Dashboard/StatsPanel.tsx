@@ -9,14 +9,14 @@ interface StatsPanelProps {
 export const StatsPanel: React.FC<StatsPanelProps> = ({ stats }) => {
   const statCards = [
     {
-      title: 'Total Pilgrims',
+      title: 'Tracked Records',
       value: stats.totalPilgrims.toLocaleString(),
       icon: Users,
       color: 'text-blue-400',
       bgColor: 'bg-blue-500/20'
     },
     {
-      title: 'Current in Area',
+      title: 'Aggregate Zone Occupancy',
       value: stats.currentInArea.toLocaleString(),
       icon: Activity,
       color: 'text-green-400',
