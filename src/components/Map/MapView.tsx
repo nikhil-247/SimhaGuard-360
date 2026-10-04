@@ -24,7 +24,7 @@ export const MapView: React.FC<MapViewProps> = ({
   return (
     <div className="bg-slate-800 rounded-lg border border-slate-700 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Simhastha 2028 · Operational Map</h2>
+        <h2 className="text-lg font-semibold text-white">SimhaGuard 360 · Event Operations Map</h2>
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -48,7 +48,7 @@ export const MapView: React.FC<MapViewProps> = ({
           viewBox="0 0 800 500"
           className="bg-gradient-to-br from-slate-700 to-slate-800"
         >
-          {/* River Ganga */}
+          {/* Zone River / Water Edge */}
           <path
             d="M 0 150 Q 200 130 400 150 T 800 170"
             stroke="#2563EB"
@@ -56,9 +56,9 @@ export const MapView: React.FC<MapViewProps> = ({
             fill="none"
             opacity="0.8"
           />
-          <text x="350" y="140" className="text-sm fill-blue-300 font-medium">River Ganga</text>
+          <text x="350" y="140" className="text-sm fill-blue-300 font-medium">Zone River / Water Edge</text>
 
-          {/* River Yamuna */}
+          {/* Service Boundary */}
           <path
             d="M 0 300 Q 200 280 400 300 T 800 320"
             stroke="#1D4ED8"
@@ -66,18 +66,18 @@ export const MapView: React.FC<MapViewProps> = ({
             fill="none"
             opacity="0.7"
           />
-          <text x="350" y="290" className="text-sm fill-blue-300 font-medium">River Yamuna</text>
+          <text x="350" y="290" className="text-sm fill-blue-300 font-medium">Service Boundary</text>
 
-          {/* Triveni Sangam */}
+          {/* Central Safety Zone */}
           <circle cx="400" cy="225" r="25" fill="#3B82F6" opacity="0.6" />
-          <text x="430" y="230" className="text-sm fill-blue-200 font-bold">Triveni Sangam</text>
+          <text x="430" y="230" className="text-sm fill-blue-200 font-bold">Central Safety Zone</text>
 
           {/* Main Roads */}
           <line x1="0" y1="80" x2="800" y2="80" stroke="#64748B" strokeWidth="4" />
-          <text x="10" y="75" className="text-xs fill-slate-300">NH-2 Highway</text>
+          <text x="10" y="75" className="text-xs fill-slate-300">Main Access Corridor</text>
           
           <line x1="0" y1="420" x2="800" y2="420" stroke="#64748B" strokeWidth="4" />
-          <text x="10" y="415" className="text-xs fill-slate-300">Yamuna Expressway</text>
+          <text x="10" y="415" className="text-xs fill-slate-300">External Evacuation Corridor</text>
           
           <line x1="150" y1="0" x2="150" y2="500" stroke="#64748B" strokeWidth="3" />
           <line x1="650" y1="0" x2="650" y2="500" stroke="#64748B" strokeWidth="3" />
@@ -85,16 +85,16 @@ export const MapView: React.FC<MapViewProps> = ({
           {/* Main Gates */}
           <g>
             <rect x="120" y="70" width="60" height="20" fill="#F59E0B" rx="3" />
-            <text x="150" y="83" textAnchor="middle" className="text-xs fill-white font-bold">Gate 1</text>
+            <text x="150" y="83" textAnchor="middle" className="text-xs fill-white font-bold">Gate A</text>
 
             <rect x="250" y="70" width="60" height="20" fill="#F59E0B" rx="3" />
-            <text x="280" y="83" textAnchor="middle" className="text-xs fill-white font-bold">Gate 2</text>
+            <text x="280" y="83" textAnchor="middle" className="text-xs fill-white font-bold">Gate B</text>
 
             <rect x="450" y="70" width="60" height="20" fill="#F59E0B" rx="3" />
-            <text x="480" y="83" textAnchor="middle" className="text-xs fill-white font-bold">Gate 3</text>
+            <text x="480" y="83" textAnchor="middle" className="text-xs fill-white font-bold">Gate C</text>
 
             <rect x="580" y="70" width="60" height="20" fill="#EF4444" rx="3" />
-            <text x="610" y="83" textAnchor="middle" className="text-xs fill-white font-bold">VIP Gate</text>
+            <text x="610" y="83" textAnchor="middle" className="text-xs fill-white font-bold">Priority Gate</text>
 
             <rect x="120" y="410" width="60" height="20" fill="#10B981" rx="3" />
             <text x="150" y="423" textAnchor="middle" className="text-xs fill-white font-bold">Emergency</text>
@@ -106,16 +106,16 @@ export const MapView: React.FC<MapViewProps> = ({
           {/* Sacred Ghats */}
           <g>
             <rect x="200" y="160" width="80" height="15" fill="#475569" rx="2" />
-            <text x="240" y="172" textAnchor="middle" className="text-xs fill-slate-200">Dashashwamedh Ghat</text>
+            <text x="240" y="172" textAnchor="middle" className="text-xs fill-slate-200">Zone A</text>
 
             <rect x="320" y="165" width="70" height="15" fill="#475569" rx="2" />
-            <text x="355" y="177" textAnchor="middle" className="text-xs fill-slate-200">Manikarnika Ghat</text>
+            <text x="355" y="177" textAnchor="middle" className="text-xs fill-slate-200">Zone B</text>
 
             <rect x="450" y="160" width="70" height="15" fill="#475569" rx="2" />
-            <text x="485" y="172" textAnchor="middle" className="text-xs fill-slate-200">Assi Ghat</text>
+            <text x="485" y="172" textAnchor="middle" className="text-xs fill-slate-200">Zone C</text>
 
             <rect x="200" y="310" width="80" height="15" fill="#475569" rx="2" />
-            <text x="240" y="322" textAnchor="middle" className="text-xs fill-slate-200">Saraswati Ghat</text>
+            <text x="240" y="322" textAnchor="middle" className="text-xs fill-slate-200">Zone D</text>
           </g>
 
           {/* Crowd Zones */}
@@ -130,28 +130,28 @@ export const MapView: React.FC<MapViewProps> = ({
           {/* Key Landmarks */}
           <g>
             <circle cx="380" cy="200" r="8" fill="#10B981" />
-            <text x="390" y="205" className="text-xs fill-green-300">Akshayavat</text>
+            <text x="390" y="205" className="text-xs fill-green-300">Operations Node</text>
 
             <circle cx="450" cy="250" r="8" fill="#F59E0B" />
-            <text x="460" y="255" className="text-xs fill-yellow-300">Hanuman Temple</text>
+            <text x="460" y="255" className="text-xs fill-yellow-300">Assembly Point</text>
 
             <rect x="100" y="200" width="20" height="20" fill="#8B5CF6" rx="3" />
             <text x="125" y="212" className="text-xs fill-purple-300">Command Center</text>
 
             <rect x="550" y="180" width="20" height="20" fill="#10B981" rx="3" />
-            <text x="575" y="192" className="text-xs fill-emerald-300">Medical Camp 1</text>
+            <text x="575" y="192" className="text-xs fill-emerald-300">Medical Unit A</text>
 
             <rect x="250" y="350" width="20" height="20" fill="#10B981" rx="3" />
-            <text x="275" y="362" className="text-xs fill-emerald-300">Medical Camp 2</text>
+            <text x="275" y="362" className="text-xs fill-emerald-300">Medical Unit B</text>
 
             <rect x="150" y="350" width="20" height="20" fill="#EF4444" rx="3" />
-            <text x="175" y="362" className="text-xs fill-red-300">Fire Station</text>
+            <text x="175" y="362" className="text-xs fill-red-300">Fire Unit</text>
 
             <rect x="350" y="120" width="20" height="20" fill="#3B82F6" rx="3" />
-            <text x="375" y="132" className="text-xs fill-blue-300">Police Post 1</text>
+            <text x="375" y="132" className="text-xs fill-blue-300">Security Post A</text>
 
             <rect x="500" y="380" width="20" height="20" fill="#3B82F6" rx="3" />
-            <text x="525" y="392" className="text-xs fill-blue-300">Police Post 2</text>
+            <text x="525" y="392" className="text-xs fill-blue-300">Security Post B</text>
           </g>
 
           {/* Sector Boundaries */}
