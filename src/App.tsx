@@ -33,6 +33,7 @@ const DashboardContent: React.FC = () => {
     lastUpdate,
     addAlert,
     resolveAlert,
+    markRFIDDistress,
     loading
   } = useSupabaseData();
 
