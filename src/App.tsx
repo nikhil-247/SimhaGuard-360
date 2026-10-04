@@ -135,7 +135,7 @@ const DashboardContent: React.FC = () => {
                 onZoneSelect={setSelectedZone}
               />
             </div>
-            <RFIDTracker devices={rfidDevices} />
+            <RFIDTracker devices={rfidDevices} onDistress={markRFIDDistress} />
           </div>
         );
       case 'alerts':
