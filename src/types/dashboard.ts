@@ -1,10 +1,17 @@
+export interface MapCoordinate {
+  x: number;
+  y: number;
+  width?: number;
+  height?: number;
+}
+
 export interface CrowdZone {
   id: string;
   name: string;
-  coordinates: { x: number; y: number; width: number; height: number };
+  coordinates: MapCoordinate;
   currentCapacity: number;
   maxCapacity: number;
-  status: 'safe' | 'moderate' | 'critical';
+  status: 'safe' | 'moderate' | 'critical' | 'closed';
   lastUpdated: Date;
 }
 
@@ -13,7 +20,7 @@ export interface EmergencyUnit {
   type: 'medical' | 'police' | 'rescue' | 'fire';
   name: string;
   coordinates: { x: number; y: number };
-  status: 'available' | 'busy' | 'emergency';
+  status: 'available' | 'busy' | 'offline';
   contact: string;
 }
 
@@ -29,9 +36,20 @@ export interface RFIDDevice {
   isDistressed: boolean;
 }
 
+export type AlertType =
+  | 'crowd'
+  | 'stampede'
+  | 'fire'
+  | 'flood'
+  | 'medical'
+  | 'lost_person'
+  | 'security'
+  | 'weather'
+  | 'system';
+
 export interface Alert {
   id: string;
-  type: 'stampede' | 'fire' | 'flood' | 'medical' | 'lost_person' | 'security';
+  type: AlertType;
   severity: 'low' | 'medium' | 'high' | 'critical';
   title: string;
   description: string;
@@ -39,7 +57,10 @@ export interface Alert {
   coordinates: { x: number; y: number };
   timestamp: Date;
   isActive: boolean;
-  estimatedResolutionTime?: string;
+  estimatedResolutionTime?: number;
+  createdBy?: string | null;
+  resolvedBy?: string | null;
+  resolvedAt?: Date | null;
 }
 
 export interface PilgrimStats {
@@ -63,7 +84,7 @@ export interface EvacuationRoute {
 export interface UserRole {
   id: string;
   name: string;
-  role: 'admin' | 'medical' | 'security' | 'volunteer';
+  role: 'admin' | 'user';
   department: string;
   permissions: string[];
   isOnline: boolean;
