@@ -1,123 +1,94 @@
 import React, { useState } from 'react';
-import { Settings, Users, Shield, AlertTriangle, Radio, Zap } from 'lucide-react';
+import { Settings, Users, Shield, AlertTriangle, Radio, FileText } from 'lucide-react';
 
 interface ControlPanelProps {
-  onEmergencyAction: (action: string, data: any) => void;
+  onEmergencyAction: (action: string, data: unknown) => void;
 }
+
+const actions = [
+  {
+    id: 'crowd-review',
+    title: 'Flag crowd-flow risk',
+    description: 'Create an operator incident for crowd-flow review',
+    icon: Users,
+  },
+  {
+    id: 'medical-review',
+    title: 'Request medical review',
+    description: 'Create a high-priority incident for the medical team',
+    icon: Shield,
+  },
+  {
+    id: 'evacuation-review',
+    title: 'Open evacuation review',
+    description: 'Create an incident for authorized evacuation planning',
+    icon: AlertTriangle,
+  },
+  {
+    id: 'broadcast-draft',
+    title: 'Create broadcast task',
+    description: 'Create an operator task for a multilingual announcement',
+    icon: Radio,
+  },
+];
 
 export const ControlPanel: React.FC<ControlPanelProps> = ({ onEmergencyAction }) => {
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [barrierMode, setBarrierMode] = useState(false);
+  const [lastAction, setLastAction] = useState<string | null>(null);
 
-  const languages = [
-    { code: 'en', name: 'English' },
-    { code: 'hi', name: 'हिंदी' },
-    { code: 'mr', name: 'मराठी' },
-    { code: 'gu', name: 'ગુજરાતી' }
-  ];
-
-  const emergencyActions = [
-    {
-      id: 'crowd-alert',
-      title: 'Send Crowd Alert',
-      description: 'Broadcast crowd management alert',
-      icon: Users,
-      color: 'bg-yellow-500',
-      action: () => onEmergencyAction('crowd-alert', { zones: ['all'] })
-    },
-    {
-      id: 'medical-emergency',
-      title: 'Medical Emergency',
-      description: 'Dispatch medical teams',
-      icon: Shield,
-      color: 'bg-red-500',
-      action: () => onEmergencyAction('medical-emergency', { priority: 'high' })
-    },
-    {
-      id: 'evacuation',
-      title: 'Initiate Evacuation',
-      description: 'Activate evacuation protocols',
-      icon: AlertTriangle,
-      color: 'bg-orange-500',
-      action: () => onEmergencyAction('evacuation', { routes: 'all' })
-    },
-    {
-      id: 'broadcast',
-      title: 'Emergency Broadcast',
-      description: 'Send multilingual announcement',
-      icon: Radio,
-      color: 'bg-blue-500',
-      action: () => onEmergencyAction('broadcast', { language: selectedLanguage })
-    }
-  ];
+  const submit = (id: string) => {
+    const language = id === 'broadcast-draft' ? selectedLanguage : undefined;
+    onEmergencyAction(id, language ? { language } : {});
+    setLastAction(id);
+  };
 
   return (
     <div className="bg-slate-800 rounded-lg border border-slate-700 p-6">
-      <div className="flex items-center space-x-2 mb-6">
+      <div className="flex items-center space-x-2 mb-2">
         <Settings className="w-5 h-5 text-white" />
-        <h2 className="text-lg font-semibold text-white">Control Panel</h2>
+        <h2 className="text-lg font-semibold text-white">Operator Actions</h2>
       </div>
+      <p className="text-xs text-slate-400 mb-5">
+        These controls create auditable incident/tasks in the current system. External dispatch, PA systems and physical barriers are not connected.
+      </p>
 
-      {/* Language Selection */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-slate-300 mb-2">
-          Alert Language
-        </label>
+      <div className="mb-5">
+        <label className="block text-sm font-medium text-slate-300 mb-2">Broadcast language</label>
         <select
           value={selectedLanguage}
           onChange={(e) => setSelectedLanguage(e.target.value)}
           className="w-full bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          {languages.map((lang) => (
-            <option key={lang.code} value={lang.code}>
-              {lang.name}
-            </option>
-          ))}
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="mr">मराठी</option>
+          <option value="gu">ગુજરાતી</option>
         </select>
       </div>
 
-      {/* Dynamic Barriers Control */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <label className="text-sm font-medium text-slate-300">
-            Dynamic Barriers
-          </label>
-          <button
-            onClick={() => setBarrierMode(!barrierMode)}
-            className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ${
-              barrierMode ? 'bg-blue-500' : 'bg-slate-600'
-            }`}
-          >
-            <span
-              className={`inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ${
-                barrierMode ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
-          </button>
-        </div>
-        <p className="text-xs text-slate-400">
-          {barrierMode ? 'Auto-deployment enabled' : 'Manual control active'}
-        </p>
-      </div>
-
-      {/* Emergency Actions */}
       <div className="space-y-3">
-        <h3 className="text-sm font-medium text-slate-300 mb-3">Emergency Actions</h3>
-        {emergencyActions.map((action) => {
-          const IconComponent = action.icon;
+        {actions.map(action => {
+          const Icon = action.icon;
+          const active = lastAction === action.id;
           return (
             <button
+              type="button"
               key={action.id}
-              onClick={action.action}
-              className="w-full text-left bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:border-slate-500 rounded-lg p-4 transition-all duration-200 group"
+              onClick={() => submit(action.id)}
+              className={
+                'w-full text-left rounded-lg border p-4 transition-colors ' +
+                (active
+                  ? 'border-emerald-500/50 bg-emerald-500/10'
+                  : 'border-slate-600 bg-slate-700 hover:bg-slate-600')
+              }
             >
-              <div className="flex items-center space-x-3">
-                <div className={`${action.color} p-2 rounded-lg group-hover:scale-110 transition-transform duration-200`}>
-                  <IconComponent className="w-4 h-4 text-white" />
+              <div className="flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-slate-600">
+                  <Icon className="w-5 h-5 text-slate-200" />
                 </div>
                 <div>
-                  <p className="font-medium text-white">{action.title}</p>
-                  <p className="text-sm text-slate-400">{action.description}</p>
+                  <p className="text-sm font-semibold text-white">{action.title}</p>
+                  <p className="text-xs text-slate-400 mt-1">{action.description}</p>
                 </div>
               </div>
             </button>
@@ -125,33 +96,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ onEmergencyAction })
         })}
       </div>
 
-      {/* System Status */}
-      <div className="mt-6 pt-6 border-t border-slate-700">
-        <h3 className="text-sm font-medium text-slate-300 mb-3">System Status</h3>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">RFID Network</span>
-            <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-xs text-green-400">Online</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Communication Link</span>
-            <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-xs text-green-400">Connected</span>
-            </div>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">Emergency Systems</span>
-            <div className="flex items-center space-x-1">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-xs text-green-400">Ready</span>
-            </div>
-          </div>
+      {lastAction && (
+        <div className="mt-4 flex items-center gap-2 text-xs text-emerald-300">
+          <FileText className="w-4 h-4" />
+          Operator intent recorded: {lastAction}
         </div>
-      </div>
+      )}
     </div>
   );
 };
