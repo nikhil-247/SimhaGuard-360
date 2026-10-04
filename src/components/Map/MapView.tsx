@@ -24,7 +24,7 @@ export const MapView: React.FC<MapViewProps> = ({
   return (
     <div className="bg-slate-800 rounded-lg border border-slate-700 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Maha Kumbh 2025 - Live Event Map</h2>
+        <h2 className="text-lg font-semibold text-white">Simhastha 2028 · Operational Map</h2>
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -169,18 +169,9 @@ export const MapView: React.FC<MapViewProps> = ({
           <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
           <span className="text-xs text-green-400 font-medium">LIVE</span>
         </div>
-
-        {/* Weather Info */}
         <div className="absolute top-4 left-4 bg-slate-800/80 backdrop-blur-sm rounded-lg px-3 py-2">
-          <div className="text-xs text-slate-300">
-            <div className="flex items-center space-x-2">
-              <span>🌤️</span>
-              <span>26°C</span>
-              <span>•</span>
-              <span>Clear</span>
-            </div>
-            <div className="text-slate-400 mt-1">Wind: 5 km/h NE</div>
-          </div>
+          <div className="text-xs text-slate-300">Normalized event geometry</div>
+          <div className="text-[10px] text-slate-500 mt-1">Replace with verified GIS/weather feeds for deployment.</div>
         </div>
       </div>
     </div>
