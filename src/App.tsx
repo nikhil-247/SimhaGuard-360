@@ -21,7 +21,6 @@ const DashboardContent: React.FC = () => {
   const { profile, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedZone, setSelectedZone] = useState<string>();
-  const [simulationMode, setSimulationMode] = useState(true);
   const [showAIChat, setShowAIChat] = useState(false);
   
   const {
@@ -176,26 +175,6 @@ const DashboardContent: React.FC = () => {
           />
           
           <main className="flex-1 p-6">
-            {simulationMode && (
-              <div className="mb-6 bg-blue-500/20 border border-blue-500/50 rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-blue-400 rounded-full animate-pulse"></div>
-                    <span className="text-blue-400 font-medium">Simulation Mode Active</span>
-                  </div>
-                  <button
-                    onClick={() => setSimulationMode(false)}
-                    className="text-blue-400 hover:text-blue-300 text-sm"
-                  >
-                    Exit Simulation
-                  </button>
-                </div>
-                <p className="text-sm text-blue-300 mt-1">
-                  Demo data is being generated for testing purposes. Real-time data will be available during the event.
-                </p>
-              </div>
-            )}
-
             {renderMainContent()}
           </main>
         </div>
