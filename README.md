@@ -1,93 +1,113 @@
 # SimhaGuard 360
 
-**Real-Time Crowd Safety & Emergency Response Platform**
+**Operational Crowd-Safety Dashboard for Large Public Events**
 
-SimhaGuard 360 is a web-based safety dashboard designed for large public gatherings such as **Simhastha 2028**. It brings crowd monitoring, predictive alerts, incident coordination, evacuation support, family tracking, and an AI safety assistant into a single role-based interface.
+SimhaGuard 360 is a React/TypeScript + Supabase operations prototype focused on authenticated access, realtime operational state, incident lifecycle, RFID distress handling, and transparent risk signals.
 
-> **Project status:** Working prototype / research project. Demo data is included for local development. It is not an officially deployed emergency-response system.
+> **Status:** working engineering prototype. It is not an officially deployed emergency-response system. The map geometry and some response integrations remain simulation/extension points.
 
-## Highlights
+## What is actually implemented
 
-- Role-based experiences for admins, volunteers, and users
-- Real-time dashboard synchronization with Supabase
-- Crowd-density heatmap and location markers
-- Predictive crowd-surge alerts
-- Incident and alert management workflows
-- Evacuation-route visualization
-- RFID-based family/wristband tracking interface
-- AI safety assistant for context-aware support
-- Database health and system monitoring views
-- Responsive React + TypeScript frontend
+- Supabase Auth with protected routes
+- Role-aware admin and user experiences
+- Realtime subscriptions for crowd zones, emergency units, RFID records and alerts
+- Live crowd occupancy calculation from stored zone data
+- Incident creation and resolution persisted to Supabase
+- Incident audit events for create/resolve actions
+- RFID tracking workflow with restricted operations access
+- RFID distress flag that creates a linked high-priority incident
+- Operational risk signals derived from live data: crowd occupancy, active incident load, RFID distress and data freshness
+- Measured response-time metric from incident timestamps
+- Data-health view based on actual loaded records and freshness
+- Normalized event-map geometry with live operational overlays
+
+## What is intentionally not claimed
+
+The previous version contained several demo-style labels and hardcoded values. Those claims have been removed or renamed:
+
+- No fabricated database CPU/storage/cache numbers
+- No hardcoded weather feed
+- No AI probability claim
+- No autonomous evacuation or responder dispatch
+- No claim that the SVG map is production GIS
+- No claim of real-world RFID hardware connectivity
+- No claim that mock evacuation routes are live routes
+
+The full audit is documented in `docs/FEATURE_AUDIT.md`.
 
 ## Architecture
 
 ```text
-                    +----------------------+
-                    |   React + TypeScript  |
-                    |   Dashboard / Views   |
-                    +----------+-----------+
-                               |
-                 +-------------+-------------+
-                 |                           |
-          Local/mock data             Supabase services
-                 |                           |
-                 |                 +---------+---------+
-                 |                 | Auth / Database   |
-                 |                 | Realtime / Storage|
-                 |                 +---------+---------+
-                 |                           |
-                 +-------------+-------------+
-                               |
-                    +----------v-----------+
-                    | Safety workflows      |
-                    | alerts / maps /       |
-                    | tracking / assistant  |
-                    +-----------------------+
+                         +----------------------+
+                         | React + TypeScript   |
+                         | Protected Dashboard  |
+                         +----------+-----------+
+                                    |
+                             Supabase client
+                                    |
+          +-------------------------+--------------------------+
+          |                         |                          |
+          v                         v                          v
+     Supabase Auth             Postgres + RLS             Realtime
+          |                         |                          |
+          |                  +------+-------+          +-------+-------+
+          |                  | zones        |          | zone changes |
+          |                  | units        |          | alert changes|
+          |                  | RFID         |          | RFID changes |
+          |                  | alerts       |          +---------------+
+          |                  | audit events |
+          |                  +------+-------+
+          |                         |
+          +-------------+-----------+
+                        v
+              +----------------------+
+              | Operations workflows |
+              | crowd / incidents /  |
+              | RFID / risk signals  |
+              +----------------------+
 ```
 
-## Core modules
+## Engineering highlights
 
-### Crowd monitoring
-`CrowdHeatmap` visualizes density information and `PredictiveAlerts` provides a place for ML-driven crowd-risk signals.
+### 1. Realtime operational state
 
-### Incident response
-`AlertsPanel` and `ControlPanel` support alert review and response coordination, while `LocationMarkers` and `EvacuationRoutes` provide geographic context.
+The data hook loads operational tables in parallel and subscribes to Postgres change events. Updates are normalized into the frontend domain model and subscriptions are explicitly cleaned up on unmount.
 
-### Family safety
-`RFIDTracker` provides a dashboard workflow for locating linked wristbands and supporting family reunification scenarios.
+### 2. Incident lifecycle
 
-### AI assistance
-`AIAssistant` provides a conversational interface for context-aware safety queries.
+Operators can create and resolve incidents. Every create/resolve operation also writes an `incident_events` audit record with actor, action, payload and timestamp.
 
-### Access control
-Authentication and protected routes separate user experiences for different roles.
+### 3. RFID distress workflow
+
+RFID records are treated as sensitive operational data. Row Level Security restricts access to operations roles. Marking a device distressed updates the record and creates a corresponding incident so the state change is traceable.
+
+### 4. Transparent risk signals
+
+The former “Predictive Alerts” module was replaced with a transparent rule engine. It does not pretend to be an ML model. Signals are derived from measurable system state and show the control basis and recommended operator actions.
+
+### 5. Data health
+
+The database-monitoring view no longer reports fictional connection-pool, cache or storage metrics. It reports records loaded, active incidents, RFID distress, stale crowd zones, refresh time and access boundaries.
+
+## Security design
+
+The Supabase migration layer includes:
+
+- Row Level Security on operational tables
+- admin and operations helper functions
+- protection against client-side role escalation
+- restricted RFID read/update policies
+- audited incident changes
+- explicit created_by, resolved_by and timestamps
+
+Before any field deployment, policies should be validated against the exact Supabase project and real organizational roles.
 
 ## Tech stack
 
 **Frontend:** React, TypeScript, Vite, Tailwind CSS  
-**Backend services:** Supabase  
-**State:** React Context API, custom hooks  
-**Authentication:** Supabase Auth / protected routes  
-**Data:** Mock/local data + Supabase-backed realtime data  
-**Tooling:** ESLint, npm
-
-## Project structure
-
-```text
-src/
-├── components/
-│   ├── Auth/
-│   ├── Chat/
-│   ├── Dashboard/
-│   ├── Map/
-│   └── Navigation/
-├── contexts/
-├── data/
-├── hooks/
-├── lib/
-├── types/
-└── App.tsx
-```
+**Backend/data:** Supabase Auth, PostgreSQL, Realtime  
+**State:** React Context + custom hooks  
+**Testing/build:** ESLint, Vite build, GitHub Actions
 
 ## Getting started
 
@@ -95,7 +115,7 @@ src/
 
 - Node.js 18+
 - npm 9+
-- Optional Supabase project for realtime/authenticated features
+- Supabase project for authenticated/realtime operation
 
 ### Install
 
@@ -105,15 +125,15 @@ cd SimhaGuard-360
 npm install
 ```
 
-### Configure environment
+### Environment
 
-Copy `.env.example` to `.env` and provide the Supabase URL and anon key when using the hosted backend.
+Copy `.env.example` to `.env` and provide only the public Supabase URL and anon key:
 
 ```bash
 cp .env.example .env
 ```
 
-Never commit real credentials. Environment files are excluded by `.gitignore`.
+Never commit real credentials.
 
 ### Run
 
@@ -128,26 +148,30 @@ npm run lint
 npm run build
 ```
 
-## Development notes
+## Demo workflow
 
-The repository is structured so the UI can run with local/mock data while backend-backed features can be enabled through Supabase. This makes the project easy to demonstrate without requiring access to a live event or sensitive operational data.
+1. Sign in with a valid Supabase account.
+2. Open the operations dashboard.
+3. Review realtime crowd zones and active incidents.
+4. Open RFID tracking as an authorized operations user.
+5. Mark a test RFID device distressed.
+6. Confirm the device state and linked incident update.
+7. Resolve the incident and inspect the response-time calculation.
+8. Open Operational Risk Signals and review the transparent control basis.
+9. Open Data Health to inspect actual record counts and freshness.
 
-## Limitations
+## Known extension points
 
-This project uses simulated/mock event data for development. Real emergency deployment would require validated crowd-sensing pipelines, resilient communications, audited access control, privacy controls, failover, and field testing with relevant authorities.
+- verified GIS/map tiles and geospatial coordinates
+- real crowd-sensing ingestion
+- tested weather and disaster data sources
+- responder dispatch integrations
+- offline/failover communications
+- push/SMS/PA broadcast integrations
+- formal permission matrices for operations, medical, security and admin roles
+- observability, error tracking and audit retention
+- automated component and end-to-end tests
 
-The predictive-alert interface should therefore be treated as a decision-support prototype, not an autonomous safety system.
+## Resume-safe description
 
-## Roadmap
-
-- Add automated test coverage for critical UI flows
-- Add typed backend schemas and migration files
-- Improve offline/failover behavior
-- Connect verified crowd-density data sources
-- Add observability and error reporting
-- Add role/permission policy tests
-- Package the application for production deployment
-
-## License
-
-MIT
+> Built a React/TypeScript + Supabase crowd-safety operations dashboard with realtime crowd monitoring, auditable incident lifecycle management, RFID distress-to-alert workflow, role-aware access control and transparent rule-based operational risk signals; hardened sensitive operational data with Row Level Security and incident audit logging.
